@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Шпион / Предатель - Выбор категории</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            border-radius: 48px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .screen {
+            transition: opacity 0.4s ease, transform 0.3s;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Меню категорий */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 20px;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, #2c3e2c, #1e2a1e);
+            border-radius: 32px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #ffb347;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            background: linear-gradient(135deg, #3e5a3e, #2e3e2e);
+            border-color: #ffd966;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .category-card h2 {
+            color: #ffd966;
+            margin: 0 0 15px 0;
+            font-size: 28px;
+        }
+
+        .category-card p {
+            color: #ccccaa;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .category-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* Карточный слайдер */
+        .card-slider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 280px;
+            height: 360px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+            perspective: 1200px;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 24px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #f9f3e2, #ffefc0);
+            border: 2px solid #ffd966;
+            color: #3b2a1f;
+            font-weight: bold;
+            font-size: 28px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, #2c2c2c, #1e1e1e);
+            color: #f5c542;
+            transform: rotateY(180deg);
+            border: 1px solid #ffb347;
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .player-name-badge {
+            font-size: 20px;
+            background: #00000066;
+            padding: 8px 16px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        button {
+            background: #ffb347;
+            border: none;
+            padding: 12px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            color: #2d2b26;
+            margin: 8px;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        button.primary {
+            background: #ff7e33;
+            color: white;
+            box-shadow: 0 6px 0 #a04100;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .player-card {
+            background: #2e3b2e;
+            border-radius: 32px;
+            padding: 20px 10px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #5f7f5f;
+            box-shadow: 0 6px 0 #1e2a1e;
+        }
+
+        .player-card:hover {
+            background: #4c6e4c;
+            transform: translateY(-4px);
+        }
+
+        .vote-count {
+            font-size: 12px;
+            background: #111;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-top: 8px;
+        }
+
+        .eliminated {
+            filter: grayscale(0.7);
+            opacity: 0.5;
+            pointer-events: none;
+            text-decoration: line-through;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .message-area {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            background: #000000aa;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 60px;
+            margin-top: 20px;
+            color: #ffd966;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+            background: #00000066;
+            padding: 10px 20px;
+            border-radius: 60px;
+            width: fit-content;
+            margin: 0 auto 20px auto;
+            color: white;
+        }
+
+        input {
+            font-size: 18px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: none;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+            color: #ffd966;
+            margin: 0 0 15px 0;
+        }
+
+        .back-button {
+            background: #5a5a5a;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 650px) {
+            .card {
+                width: 240px;
+                height: 320px;
+            }
+            .card-front, .card-back {
+                font-size: 20px;
+            }
+            .players-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container" id="gameRoot">
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div id="mainMenuScreen" class="screen">
+        <h2>🕵️‍♂️ ШПИОН / ПРЕДАТЕЛЬ 🃏</h2>
+        <div class="categories-grid">
+            <div class="category-card" data-category="clash">
+                <div class="category-icon">⚔️</div>
+                <h2>КЛЕШ РОЯЛЬ</h2>
+                <p>Карты, арены, персонажи Brawl Stars</p>
+            </div>
+            <div class="category-card" data-category="normal">
+                <div class="category-icon">📚</div>
+                <h2>ОБЫЧНЫЙ</h2>
+                <p>Классические слова и предметы</p>
+            </div>
+            <div class="category-card" data-category="memes">
+                <div class="category-icon">😂</div>
+                <h2>МЕМЫ</h2>
+                <p>Интернет-мемы и приколы</p>
+            </div>
+            <div class="category-card" data-category="minecraft">
+                <div class="category-icon">⛏️</div>
+                <h2>МАЙНКРАФТ</h2>
+                <p>Блоки, мобы, предметы из Minecraft</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЭКРАН НАСТРОЙКИ ИГРОКОВ -->
+    <div id="setupScreen" class="screen hidden">
+        <button id="backToMenuBtn" class="back-button">🏠 Главное меню</button>
+        <h2 id="categoryTitle">🃏 ИГРА</h2>
+        <div class="slider-label">
+            <span>👥 Количество игроков:</span>
+            <input type="range" id="playerCountSlider" min="3" max="10" value="5">
+            <span id="countDisplay">5</span>
+        </div>
+        <div class="controls">
+            <button id="startDealBtn" class="primary">🎴 РАЗДАТЬ КАРТЫ 🎴</button>
+        </div>
+    </div>
+
+    <!-- ЭКРАН ПРОСМОТРА КАРТОЧЕК -->
+    <div id="cardsScreen" class="screen hidden">
+        <button id="backFromCardsBtn" class="back-button">🏠 Главное меню</button>
+        <h2>📜 Просмотр ролей (нажми на карту) 📜</h2>
+        <div class="card-slider">
+            <button id="prevCardBtn">◀</button>
+            <div id="cardContainer" class="card"></div>
+            <button id="nextCardBtn">▶</button>
+        </div>
+        <div class="controls">
+            <button id="resetFromCardsBtn">🔁 Заново</button>
+            <button id="startGameBtn" class="primary">⚔️ НАЧАТЬ ИГРУ (ГОЛОСОВАНИЕ) ⚔️</button>
+        </div>
+        <div class="message-area" style="font-size: 16px;">💡 Подсказка: переверните карту, чтобы узнать роль/слово</div>
+    </div>
+
+    <!-- ЭКРАН ГОЛОСОВАНИЯ -->
+    <div id="gameplayScreen" class="screen hidden">
+        <button id="backFromGameplayBtn" class="back-button">🏠 Главное меню</button>
+        <h2>🗳️ СОВЕТ ГОЛОСОВАНИЯ 🗳️</h2>
+        <div id="playersVoteGrid" class="players-grid"></div>
+        <div id="voteStatus" class="message-area" style="font-size: 18px;">Голосов: 0 / нужно для казни: 0</div>
+        <div class="controls">
+            <button id="resetGameplayBtn" class="primary">🔄 Новая игра (та же категория)</button>
+            <button id="exitToMenuBtn">🏠 В главное меню</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ====================== СПИСКИ СЛОВ ПО КАТЕГОРИЯМ ======================
+    const WORDS_BY_CATEGORY = {
+        // КЛЕШ РОЯЛЬ (Brawl Stars)
+        clash: [
+            "ШЕЛЛИ", "КОЛТ", "БУЛЛ", "БРОК", "РИКО", "БАРЛИ", "ПОКО", "РОЗА",
+            "ДЖЕССИ", "ДИНАМАЙК", "БО", "ТИК", "8-БИТ", "ЭМЗ", "СТУ", "БО",
+            "ЛЕОНИ", "СПАЙК", "КРОУ", "СЭНДИ", "АМБЕР", "МЕГ", "ФАНГ", "ИВ",
+            "АРЕНА", "КУБОК", "ЗВЕЗДНЫЕ ОЧКИ", "БРАВЛ ПАС", "ЯЩИК", "МЕГАЯЩИК",
+            "БРАВЛЕР", "ГЕМЫ", "МОНЕТЫ", "ТОКЕНЫ", "ХРОМАТИЧЕСКИЙ"
+        ],
+        // ОБЫЧНЫЙ
+        normal: [
+            "ЯБЛОКО", "СТОЛ", "КОТ", "СОБАКА", "ДОМ", "МАШИНА", "КНИГА", 
+            "НОУТБУК", "ТЕЛЕФОН", "ПИЦЦА", "КОФЕ", "ЧАЙ", "ЗОНТ", "ОКНО", 
+            "ДВЕРЬ", "КРОВАТЬ", "ЛАМПА", "РУЧКА", "БУМАГА", "ЗЕРКАЛО",
+            "ГОРОД", "ДЕРЕВНЯ", "РЕКА", "ЛЕС", "МОРЕ", "САМОЛЕТ", "ПОЕЗД"
+        ],
+        // МЕМЫ
+        memes: [
+            "ЖОПА С ВОЛОСАМИ", "НОРМИС", "КРИНЖ", "БАЗИРОВАННО", "РОФЛ",
+            "КРАШ", "ШИЗОИД", "АГРО", "БУСТЕР", "ХАЙП", "ИМБА", "ТОКСИК",
+            "СИГМА", "СКУФ", "ЧЕБУРЕК", "АУФ", "ЭПШТЕЙН", "ДИНОЗАВР",
+            "67", "1488", "ХАЛЯВКА", "ПОТРОШЕНО", "МЕМЕС", "ФЛЕКС", "ГРИНД",
+            "ЖИЗА", "ПАЦАНЫ", "ДУШНИЛА", "КРИНЖОВО", "ВАЙБ"
+        ],
+        // МАЙНКРАФТ
+        minecraft: [
+            "АЛМАЗ", "НЕЗЕРИТ", "КРИПЕР", "ЭНДЕРМЕН", "ЗОМБИ", "СКЕЛЕТ",
+            "СВИНЬЯ", "КОРОВА", "ОВЦА", "КУРИЦА", "ВОЛК", "КОШКА",
+            "ДИАМАНТ", "ИЗУМРУД", "ЗОЛОТО", "ЖЕЛЕЗО", "УГОЛЬ", "ЛАЗУРИТ",
+            "ДРАКОН", "ВИЗЕР", "ЭНДЕР", "НЕТЕР", "АД", "КРАЙ",
+            "КИРКА", "МЕЧ", "ЛУК", "ШЛЕМ", "НАГРУДНИК", "ПОНЧИКИ",
+            "СТАВКА", "ХРАНИЛИЩЕ", "ДЕРЕВНЯ", "ХРАМ", "КРЕПОСТЬ"
+        ]
+    };
+    // ============================================================================
+
+    let currentCategory = null;
+    let currentWordsList = [];
+    let players = [];
+    let currentCardIndex = 0;
+    let gameActive = true;
+    let currentVotes = {};
+    let spyWord = "";
+
+    // DOM элементы
+    const mainMenuScreen = document.getElementById('mainMenuScreen');
+    const setupScreen = document.getElementById('setupScreen');
+    const cardsScreen = document.getElementById('cardsScreen');
+    const gameplayScreen = document.getElementById('gameplayScreen');
+    const categoryTitle = document.getElementById('categoryTitle');
+    const playerCountSlider = document.getElementById('playerCountSlider');
+    const countDisplay = document.getElementById('countDisplay');
+    const startDealBtn = document.getElementById('startDealBtn');
+    const prevCardBtn = document.getElementById('prevCardBtn');
+    const nextCardBtn = document.getElementById('nextCardBtn');
+    const cardContainer = document.getElementById('cardContainer');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const resetFromCardsBtn = document.getElementById('resetFromCardsBtn');
+    const resetGameplayBtn = document.getElementById('resetGameplayBtn');
+    const playersVoteGrid = document.getElementById('playersVoteGrid');
+    const voteStatus = document.getElementById('voteStatus');
+    const backToMenuBtn = document.getElementById('backToMenuBtn');
+    const backFromCardsBtn = document.getElementById('backFromCardsBtn');
+    const backFromGameplayBtn = document.getElementById('backFromGameplayBtn');
+    const exitToMenuBtn = document.getElementById('exitToMenuBtn');
+
+    // Выбор категории
+    function selectCategory(category) {
+        currentCategory = category;
+        switch(category) {
+            case 'clash':
+                currentWordsList = [...WORDS_BY_CATEGORY.clash];
+                categoryTitle.innerHTML = '⚔️ КЛЕШ РОЯЛЬ ⚔️';
+                break;
+            case 'normal':
+                currentWordsList = [...WORDS_BY_CATEGORY.normal];
+                categoryTitle.innerHTML = '📚 ОБЫЧНЫЙ РЕЖИМ 📚';
+                break;
+            case 'memes':
+                currentWordsList = [...WORDS_BY_CATEGORY.memes];
+                categoryTitle.innerHTML = '😂 МЕМЫ 😂';
+                break;
+            case 'minecraft':
+                currentWordsList = [...WORDS_BY_CATEGORY.minecraft];
+                categoryTitle.innerHTML = '⛏️ МАЙНКРАФТ ⛏️';
+                break;
+        }
+        mainMenuScreen.classList.add('hidden');
+        setupScreen.classList.remove('hidden');
+    }
+
+    function getRandomWord() {
+        return currentWordsList[Math.floor(Math.random() * currentWordsList.length)];
+    }
+
+    function initGame(playerCount) {
+        const secretWord = getRandomWord();
+        spyWord = secretWord;
+
+        const newPlayers = [];
+        for (let i = 1; i <= playerCount; i++) {
+            newPlayers.push({
+                id: i,
+                name: `Игрок ${i}`,
+                role: 'civilian',
+                word: secretWord,
+                isEliminated: false,
+            });
+        }
+        const spyIndex = Math.floor(Math.random() * playerCount);
+        newPlayers[spyIndex].role = 'spy';
+        newPlayers[spyIndex].word = 'ПРЕДАТЕЛЬ';
+
+        players = newPlayers;
+        currentCardIndex = 0;
+        gameActive = true;
+        currentVotes = {};
+        players.forEach(p => { currentVotes[p.id] = 0; });
+    }
+
+    function renderCardSlider() {
+        if (!players.length) return;
+        const player = players[currentCardIndex];
+        cardContainer.innerHTML = '';
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'card';
+        cardDiv.innerHTML = `
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="player-name-badge">${player.name}</div>
+                    <div style="font-size: 18px;">❓ ТАЙНА ❓</div>
+                    <div style="margin-top: 20px; font-size: 14px;">👇 нажми, чтобы узнать роль</div>
+                </div>
+                <div class="card-back">
+                    ${player.role === 'spy' ? '🕵️‍♂️ ПРЕДАТЕЛЬ 🕵️‍♂️' : `🔍 СЛОВО: <br><span style="font-size:32px;">${player.word}</span>`}
+                </div>
+            </div>
+        `;
+        cardDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cardDiv.classList.toggle('flipped');
+        });
+        cardContainer.appendChild(cardDiv);
+    }
+
+    function nextCard() {
+        if (players.length === 0) return;
+        currentCardIndex = (currentCardIndex + 1) % players.length;
+        renderCardSlider();
+    }
+
+    function prevCard() {
+        if (players.length === 0) return;
+        currentCardIndex = (currentCardIndex - 1 + players.length) % players.length;
+        renderCardSlider();
+    }
+
+    function renderVotingField() {
+        if (!players.length) return;
+        const alivePlayers = players.filter(p => !p.isEliminated);
+        if (alivePlayers.length === 0) {
+            playersVoteGrid.innerHTML = '<div style="color:white">Все игроки выбыли...</div>';
+            voteStatus.innerText = 'Игра окончена';
+            return;
+        }
+
+        let html = '';
+        players.forEach(player => {
+            if (player.isEliminated) {
+                html += `<div class="player-card eliminated">
+                            <div>💀 ${player.name} (ИЗГНАН)</div>
+                         </div>`;
+            } else {
+                const voteCount = currentVotes[player.id] || 0;
+                html += `<div class="player-card" data-id="${player.id}">
+                            <div>🎭 ${player.name}</div>
+                            <div class="vote-count">🗳️ Голосов: ${voteCount}</div>
+                         </div>`;
+            }
+        });
+        playersVoteGrid.innerHTML = html;
+
+        const aliveNow = players.filter(p => !p.isEliminated);
+        const neededToEliminate = Math.floor(aliveNow.length / 2) + 1;
+        voteStatus.innerText = `⚡ Для изгнания нужно: ${neededToEliminate} голосов (из ${aliveNow.length} живых)`;
+
+        document.querySelectorAll('.player-card:not(.eliminated)').forEach(card => {
+            const playerId = parseInt(card.getAttribute('data-id'));
+            // Убираем старые обработчики, чтобы не навешивать несколько раз
+            const newCard = card.cloneNode(true);
+            card.parentNode.replaceChild(newCard, card);
+            newCard.addEventListener('click', () => {
+                if (!gameActive) {
+                    alert('Игра уже завершена! Начните новую игру.');
+                    return;
+                }
+                const targetPlayer = players.find(p => p.id === playerId);
+                if (!targetPlayer || targetPlayer.isEliminated) return;
+
+                currentVotes[playerId] = (currentVotes[playerId] || 0) + 1;
+                
+                const aliveNowCheck = players.filter(p => !p.isEliminated);
+                const need = Math.floor(aliveNowCheck.length / 2) + 1;
+                if (currentVotes[playerId] >= need) {
+                    eliminatePlayer(targetPlayer.id);
+                } else {
+                    renderVotingField();
+                }
+            });
+        });
+    }
+
+    function eliminatePlayer(playerId) {
+        if (!gameActive) return;
+        const target = players.find(p => p.id === playerId);
+        if (!target || target.isEliminated) return;
+
+        target.isEliminated = true;
+        
+        if (target.role === 'spy') {
+            gameActive = false;
+            voteStatus.innerHTML = `🏆🏆🏆 МИРНЫЕ ПОБЕДИЛИ! Предатель ${target.name} изгнан! 🏆🏆🏆`;
+            renderVotingField();
+            const winMessage = document.createElement('div');
+            winMessage.className = 'message-area';
+            winMessage.style.background = '#ffaa33';
+            winMessage.style.color = '#1f2a0e';
+            winMessage.innerText = '✨ МИРНЫЕ ПОБЕДИЛИ! ✨';
+            playersVoteGrid.parentNode.insertBefore(winMessage, playersVoteGrid.nextSibling);
+            setTimeout(() => winMessage.remove(), 3000);
+            return;
+        }
+        
+        players.forEach(p => { currentVotes[p.id] = 0; });
+        
+        const alive = players.filter(p => !p.isEliminated);
+        if (alive.length === 1 && alive[0].role === 'spy') {
+            gameActive = false;
+            voteStatus.innerHTML = `⚠️ Остался только предатель! Мирные проиграли... Начните новую игру.`;
+            renderVotingField();
+            return;
+        }
+        
+        renderVotingField();
+    }
+
+    function startGameplay() {
+        players.forEach(p => { currentVotes[p.id] = 0; });
+        gameActive = true;
+        setupScreen.classList.add('hidden');
+        cardsScreen.classList.add('hidden');
+        gameplayScreen.classList.remove('hidden');
+        renderVotingField();
+    }
+
+    function fullReset() {
+        mainMenuScreen.classList.remove('hidden');
+        setupScreen.classList.add('hidden');
+        cardsScreen.classList.add('hidden');
+        gameplayScreen.classList.add('hidden');
+        players = [];
+        gameActive = true;
+        currentVotes = {};
+        currentCategory = null;
+    }
+
+    // Новая игра в той же категории (перезапуск с текущими настройками)
+    function restartGameInCategory() {
+        if (!currentCategory) return;
+        const playerCount = parseInt(playerCountSlider.value);
+        initGame(playerCount);
+        currentCardIndex = 0;
+        gameActive = true;
+        // Если мы в экране голосования - переходим к раздаче карт
+        if (!gameplayScreen.classList.contains('hidden')) {
+            // Переходим к просмотру карточек
+            renderCardSlider();
+            gameplayScreen.classList.add('hidden');
+            cardsScreen.classList.remove('hidden');
+        } else if (!cardsScreen.classList.contains('hidden')) {
+            renderCardSlider();
+        }
+    }
+
+    function dealCards() {
+        const playerCount = parseInt(playerCountSlider.value);
+        initGame(playerCount);
+        currentCardIndex = 0;
+        renderCardSlider();
+        setupScreen.classList.add('hidden');
+        cardsScreen.classList.remove('hidden');
+        gameplayScreen.classList.add('hidden');
+    }
+
+    // Обработчики событий
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const category = card.getAttribute('data-category');
+            selectCategory(category);
+        });
+    });
+
+    startDealBtn.addEventListener('click', dealCards);
+    nextCardBtn.addEventListener('click', nextCard);
+    prevCardBtn.addEventListener('click', prevCard);
+    startGameBtn.addEventListener('click', startGameplay);
+    resetFromCardsBtn.addEventListener('click', () => {
+        const playerCount = parseInt(playerCountSlider.value);
+        initGame(playerCount);
+        currentCardIndex = 0;
+        renderCardSlider();
+    });
+    
+    // Кнопка "Новая игра" в экране голосования
+    resetGameplayBtn.addEventListener('click', () => {
+        if (!currentCategory) {
+            fullReset();
+            return;
+        }
+        const playerCount = parseInt(playerCountSlider.value);
+        initGame(playerCount);
+        currentCardIndex = 0;
+        gameActive = true;
+        renderCardSlider();
+        gameplayScreen.classList.add('hidden');
+        cardsScreen.classList.remove('hidden');
+    });
+    
+    playerCountSlider.addEventListener('input', (e) => {
+        countDisplay.innerText = e.target.value;
+    });
+
+    // Кнопки возврата в меню
+    backToMenuBtn.addEventListener('click', fullReset);
+    backFromCardsBtn.addEventListener('click', fullReset);
+    backFromGameplayBtn.addEventListener('click', fullReset);
+    exitToMenuBtn.addEventListener('click', fullReset);
+
+    // Инициализация
+    fullReset();
+</script>
+</body>
+</html>
