@@ -309,6 +309,11 @@
                 <h2>КЛЕШ РОЯЛЬ</h2>
                 <p>Карты, арены, персонажи Brawl Stars</p>
             </div>
+            <div class="category-card" data-category="brawlstars">
+                <div class="category-icon">⭐</div>
+                <h2>БРАВЛ СТАРС</h2>
+                <p>Бравлеры, гаджеты, звездные силы</p>
+            </div>
             <div class="category-card" data-category="normal">
                 <div class="category-icon">📚</div>
                 <h2>ОБЫЧНЫЙ</h2>
@@ -323,6 +328,11 @@
                 <div class="category-icon">⛏️</div>
                 <h2>МАЙНКРАФТ</h2>
                 <p>Блоки, мобы, предметы из Minecraft</p>
+            </div>
+            <div class="category-card" data-category="karateli">
+                <div class="category-icon">🔫</div>
+                <h2>КАРАТЕЛИ</h2>
+                <p>Криминал, мафия, гангстеры</p>
             </div>
         </div>
     </div>
@@ -375,35 +385,41 @@
     const WORDS_BY_CATEGORY = {
         // КЛЕШ РОЯЛЬ (Brawl Stars)
         clash: [
+        "Всадник на кабане", "Рыцарь", "Голем", "Королевский Гигант", "Валькирия", "Элитные варвары", 
+            "Рыбак", "Мегарыцарь", "Гигант", "Шахтер", "Дровосек", "Ведьма", "Гоблины", "Боевой Таран",
+            "пушка", "бревно", "бочка гоблинов", "охотник", "землетрясение", "гигантский скелет", "тесла"
+        ],
+        // БРАВЛ СТАРС (отдельный режим с расширенным списком)
+        brawlstars: [
             "ШЕЛЛИ", "КОЛТ", "БУЛЛ", "БРОК", "РИКО", "БАРЛИ", "ПОКО", "РОЗА",
-            "ДЖЕССИ", "ДИНАМАЙК", "БО", "ТИК", "8-БИТ", "ЭМЗ", "СТУ", "БО",
-            "ЛЕОНИ", "СПАЙК", "КРОУ", "СЭНДИ", "АМБЕР", "МЕГ", "ФАНГ", "ИВ",
-            "АРЕНА", "КУБОК", "ЗВЕЗДНЫЕ ОЧКИ", "БРАВЛ ПАС", "ЯЩИК", "МЕГАЯЩИК",
-            "БРАВЛЕР", "ГЕМЫ", "МОНЕТЫ", "ТОКЕНЫ", "ХРОМАТИЧЕСКИЙ"
+            "ДЖЕССИ", "ДИНАМАЙК", "БО", "ТИК", "8-БИТ", "ЭМЗ", "СТУ",
+            "ЛЕОН", "СПАЙК", "КРОУ", "СЭНДИ", "АМБЕР", "МЕГ", "ФАНГ", "МОРТИС",
+            "МОРТИС", "ДЖИН", "ТАРА", "БИБИ", "ГРИФФ", "ЭДГАР", "БАЙРОН", "СЭМ",
+            "БРАВЛ БОЛ", "НОКАУТ", "ГОРЯЧАЯ ЗОНА"
         ],
         // ОБЫЧНЫЙ
         normal: [
-            "ЯБЛОКО", "СТОЛ", "КОТ", "СОБАКА", "ДОМ", "МАШИНА", "КНИГА", 
-            "НОУТБУК", "ТЕЛЕФОН", "ПИЦЦА", "КОФЕ", "ЧАЙ", "ЗОНТ", "ОКНО", 
-            "ДВЕРЬ", "КРОВАТЬ", "ЛАМПА", "РУЧКА", "БУМАГА", "ЗЕРКАЛО",
-            "ГОРОД", "ДЕРЕВНЯ", "РЕКА", "ЛЕС", "МОРЕ", "САМОЛЕТ", "ПОЕЗД"
-        ],
+            "яблоко", "дерево", "байкал", "машина", "книга", "монета", "баня", "облако",
+            "трусы", "носки", "шляпа", "шлюха дешевая"
+                ],
         // МЕМЫ
         memes: [
-            "ЖОПА С ВОЛОСАМИ", "НОРМИС", "КРИНЖ", "БАЗИРОВАННО", "РОФЛ",
-            "КРАШ", "ШИЗОИД", "АГРО", "БУСТЕР", "ХАЙП", "ИМБА", "ТОКСИК",
-            "СИГМА", "СКУФ", "ЧЕБУРЕК", "АУФ", "ЭПШТЕЙН", "ДИНОЗАВР",
-            "67", "1488", "ХАЛЯВКА", "ПОТРОШЕНО", "МЕМЕС", "ФЛЕКС", "ГРИНД",
-            "ЖИЗА", "ПАЦАНЫ", "ДУШНИЛА", "КРИНЖОВО", "ВАЙБ"
+            "67", "эпштейн", "мелстрой", "мистер бист", "литвин", "42", "окак", "стендофф 2", "село молочное", "фог",
+            "газан", "бурмалдаец", "лоу кортизол", "бро и тд", "toxis", "артур"
         ],
         // МАЙНКРАФТ
         minecraft: [
             "АЛМАЗ", "НЕЗЕРИТ", "КРИПЕР", "ЭНДЕРМЕН", "ЗОМБИ", "СКЕЛЕТ",
             "СВИНЬЯ", "КОРОВА", "ОВЦА", "КУРИЦА", "ВОЛК", "КОШКА",
-            "ДИАМАНТ", "ИЗУМРУД", "ЗОЛОТО", "ЖЕЛЕЗО", "УГОЛЬ", "ЛАЗУРИТ",
-            "ДРАКОН", "ВИЗЕР", "ЭНДЕР", "НЕТЕР", "АД", "КРАЙ",
-            "КИРКА", "МЕЧ", "ЛУК", "ШЛЕМ", "НАГРУДНИК", "ПОНЧИКИ",
-            "СТАВКА", "ХРАНИЛИЩЕ", "ДЕРЕВНЯ", "ХРАМ", "КРЕПОСТЬ"
+            "ИЗУМРУД", "ЗОЛОТО", "ЖЕЛЕЗО", "УГОЛЬ", "ЛАЗУРИТ",
+            "ДРАКОН", "ВИЗЕР", "ЭНДЕР","АД", "КРАЙ",
+            "КИРКА", "МЕЧ", "ЛУК", "ШЛЕМ", "НАГРУДНИК",
+            "ДЕРЕВНЯ", "КРЕПОСТЬ"
+        ],
+        // КАРАТЕЛИ (криминальная тематика)
+        karateli: [
+            "sewa", "Norbium", "Ximik", "Poptik", "Badcrafter", "Maiklos", "filin", 
+            "fraimy", "pip", "kotletka", "kapibara228", "yunor", "fadin", "chair"  
         ]
     };
     // ============================================================================
@@ -446,6 +462,10 @@
                 currentWordsList = [...WORDS_BY_CATEGORY.clash];
                 categoryTitle.innerHTML = '⚔️ КЛЕШ РОЯЛЬ ⚔️';
                 break;
+            case 'brawlstars':
+                currentWordsList = [...WORDS_BY_CATEGORY.brawlstars];
+                categoryTitle.innerHTML = '⭐ БРАВЛ СТАРС ⭐';
+                break;
             case 'normal':
                 currentWordsList = [...WORDS_BY_CATEGORY.normal];
                 categoryTitle.innerHTML = '📚 ОБЫЧНЫЙ РЕЖИМ 📚';
@@ -457,6 +477,10 @@
             case 'minecraft':
                 currentWordsList = [...WORDS_BY_CATEGORY.minecraft];
                 categoryTitle.innerHTML = '⛏️ МАЙНКРАФТ ⛏️';
+                break;
+            case 'karateli':
+                currentWordsList = [...WORDS_BY_CATEGORY.karateli];
+                categoryTitle.innerHTML = '🔫 КАРАТЕЛИ 🔫';
                 break;
         }
         mainMenuScreen.classList.add('hidden');
@@ -560,7 +584,6 @@
 
         document.querySelectorAll('.player-card:not(.eliminated)').forEach(card => {
             const playerId = parseInt(card.getAttribute('data-id'));
-            // Убираем старые обработчики, чтобы не навешивать несколько раз
             const newCard = card.cloneNode(true);
             card.parentNode.replaceChild(newCard, card);
             newCard.addEventListener('click', () => {
@@ -638,24 +661,6 @@
         currentCategory = null;
     }
 
-    // Новая игра в той же категории (перезапуск с текущими настройками)
-    function restartGameInCategory() {
-        if (!currentCategory) return;
-        const playerCount = parseInt(playerCountSlider.value);
-        initGame(playerCount);
-        currentCardIndex = 0;
-        gameActive = true;
-        // Если мы в экране голосования - переходим к раздаче карт
-        if (!gameplayScreen.classList.contains('hidden')) {
-            // Переходим к просмотру карточек
-            renderCardSlider();
-            gameplayScreen.classList.add('hidden');
-            cardsScreen.classList.remove('hidden');
-        } else if (!cardsScreen.classList.contains('hidden')) {
-            renderCardSlider();
-        }
-    }
-
     function dealCards() {
         const playerCount = parseInt(playerCountSlider.value);
         initGame(playerCount);
@@ -685,7 +690,6 @@
         renderCardSlider();
     });
     
-    // Кнопка "Новая игра" в экране голосования
     resetGameplayBtn.addEventListener('click', () => {
         if (!currentCategory) {
             fullReset();
@@ -704,13 +708,11 @@
         countDisplay.innerText = e.target.value;
     });
 
-    // Кнопки возврата в меню
     backToMenuBtn.addEventListener('click', fullReset);
     backFromCardsBtn.addEventListener('click', fullReset);
     backFromGameplayBtn.addEventListener('click', fullReset);
     exitToMenuBtn.addEventListener('click', fullReset);
 
-    // Инициализация
     fullReset();
 </script>
 </body>
